@@ -1,4 +1,3 @@
-// src/screens/AttendanceScreen.js
 import React, { useState, useEffect } from "react";
 import { View, Text, Button, Alert, StyleSheet } from "react-native";
 import { Calendar } from "react-native-calendars";
@@ -11,6 +10,7 @@ const AttendanceScreen = () => {
 
   useEffect(() => {
     fetchAttendance();
+    fetchAttendancebyid();
   }, []);
 
   const fetchAttendance = async () => {
@@ -28,6 +28,21 @@ const AttendanceScreen = () => {
       console.error("Error fetching attendance:", error);
     }
   };
+
+  /// by id
+  const fetchAttendancebyid = async () => {
+    if (!phone) return;
+  
+    try {
+      const userDoc = await getDoc(doc(db, "users", phone));
+      if (userDoc.exists()) {
+        setAttendance(userDoc.data().attendance || {});
+      }
+    } catch (error) {
+      console.error("Error fetching attendance:", error);
+    }
+  };
+  
 
   const markAttendance = async () => {
     try {
